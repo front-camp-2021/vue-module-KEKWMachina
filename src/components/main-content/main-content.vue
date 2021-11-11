@@ -1,12 +1,13 @@
 <template>
   <div v-if="!loading">
-    <MainContentNav :items-found="setCardsForRender().length" />
+    <main-content-nav :items-found="setCardsForRender().length" />
     <div class="main-content">
       <div class="filters">
         <div class="filters__main">
           <div class="filters__slider">
-            <PriceSlider 
+            <price-slider 
               :cards="cards[0]" 
+              :price-range="priceRange"
               @set-price="setPrice" 
             />
           </div>
@@ -14,7 +15,7 @@
             <h5 class="filters__section-header">
               Categories
             </h5>
-            <Checkbox
+            <checkbox
               v-for="item in categories[0]"
               :key="item"
               :item-name="item"
@@ -28,7 +29,7 @@
             <h5 class="filters__section-header">
               Brands
             </h5>
-            <Checkbox
+            <checkbox
               v-for="item in brands[0]"
               :key="item.id"
               :item-name="item"
@@ -38,17 +39,20 @@
             />
           </div>
         </div>
-        <button class="filters__filters-reset-button">
+        <button 
+          class="filters__filters-reset-button"
+          @click="resetSelections()"
+        >
           Reset Filters
         </button>
       </div>
       <div class="cards">
-        <Searchfield @on-input="setUserInput" />
+        <searchfield @on-input="setUserInput" />
         <div 
           v-if="cards[0]" 
           class="merchandise-cards"
         >
-          <Card
+          <card
             v-for="card in setCardsForRender().slice(selectedPage[0], selectedPage[1])"
             :key="card.id"
             :card-data="card"
@@ -62,7 +66,7 @@
         </div>
       </div>
     </div>
-    <Pagination 
+    <pagination 
       :card-data="setCardsForRender()"
       :active-page="selectedPage[2]"
       @set-page="setPage"
@@ -81,6 +85,7 @@ import Pagination from "../pagination/pagination.vue";
 import PriceSlider from "../slider/price-slider.vue";
 import { filterUserInput } from "../helper-functions/filterUserInput.js";
 import { filterData } from "../helper-functions/filterLogic";
+import { findMinMax } from "../helper-functions/findMinMax";
 export default {
   name: "MainContent",
   components: {
@@ -101,6 +106,7 @@ export default {
       selectedBrands: [],
       loading: true,
       userInput: "",
+      priceRange: [],
       selectedPriceRange: [],
       selectedPage: [0, 9, 1],
     };
@@ -110,6 +116,7 @@ export default {
     await this.getCards();
     await this.getCategories();
     await this.getBrands();
+    await this.setPriceRange();
     this.loading = false;
   },
   methods: {
@@ -151,6 +158,23 @@ export default {
           return card.price >= this.selectedPriceRange[0] && card.price <= this.selectedPriceRange[1];
         })
       );
+    },
+    setPriceRange() {
+      this.priceRange = findMinMax(this.cards[0]);
+    },
+    resetSelections() {
+      this.setPage(0);
+      this.selectedCategories = [];
+      this.selectedBrands = [];
+      this.userInput = '';
+      this.selectedPriceRange = [];
+      this.cards.push(this.cards[0]);
+      document.querySelector(".searchfield__input").value = '';
+      document.querySelectorAll(".filters__checkbox-square").forEach(checkbox => checkbox.checked = false);
+      const prices = document.querySelectorAll(".slider-tooltip");
+      this.priceRange = findMinMax(this.cards[0]);
+      prices[0].textContent = this.priceRange[0];
+      prices[1].textContent = this.priceRange[1];
     },
     setCardsForRender() {
       return filterData(
