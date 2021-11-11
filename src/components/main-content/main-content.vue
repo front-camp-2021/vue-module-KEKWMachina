@@ -88,7 +88,7 @@ import { filterData } from "../helper-functions/filterLogic";
 import { findMinMax } from "../helper-functions/findMinMax";
 import { watchEffect, ref } from "@vue/runtime-core";
 export default {
-  name: "COPY",
+  name: "MainContent",
   components: {
     MainContentNav,
     Checkbox,
@@ -110,7 +110,6 @@ export default {
     const loading = ref(true);
     const userInput = ref("");
     const priceRange = ref([]);
-    const selectedPriceRange = [];
     const selectedPage = ref([0, 9, 1]);
 
     watchEffect(async () => {
@@ -191,19 +190,17 @@ export default {
     };
     const resetSelections = function () {
       setPage(0);
-      selectedCategories = [];
-      selectedBrands = [];
-      userInput = "";
-      selectedPriceRange = [];
-      cards.push(cards[0]);
+      selectedCategories.value = [];
+      selectedBrands.value = [];
+      userInput.value = "";
       document.querySelector(".searchfield__input").value = "";
       document
         .querySelectorAll(".filters__checkbox-square")
         .forEach((checkbox) => (checkbox.checked = false));
       const prices = document.querySelectorAll(".slider-tooltip");
-      priceRange = findMinMax(cards[0]);
-      prices[0].textContent = priceRange[0];
-      prices[1].textContent = priceRange[1];
+      priceRange.value = findMinMax(cards.value[0]);
+      prices[0].textContent = priceRange.value[0];
+      prices[1].textContent = priceRange.value[1];
     };
 
     return {
@@ -215,7 +212,6 @@ export default {
       loading,
       userInput,
       priceRange,
-      selectedPriceRange,
       selectedPage,
       getCards,
       setUserInput,
