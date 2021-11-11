@@ -7,7 +7,7 @@
     />
     <div class="pagination__main">
       <button
-        v-for="page in pagesCount()"
+        v-for="page in pagesCount"
         :key="page"
         :class="assingClass(page)"
         @click="$emit('set-page', page)"
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { computed } from '@vue/reactivity';
 export default {
   name: "Pagination",
   props: {
@@ -36,7 +37,21 @@ export default {
       default: 1,
     },
   },
-  methods: {
+  setup(props) {
+    const pagesCount = computed(() => [...Array(Math.ceil(props.cardData.length / 9)).keys()]);
+    const assingClass = function(page) {
+      if (page + 1 === props.activePage) {
+        return "pagination__page active";
+      } else {
+        return "pagination__page";
+      }
+    } 
+    return {
+      pagesCount,
+      assingClass
+    }
+  }
+  /*methods: {
     pagesCount() {
       return [...Array(Math.ceil(this.cardData.length / 9)).keys()];
     },
@@ -47,7 +62,7 @@ export default {
         return "pagination__page";
       }
     },
-  },
+  },*/
 };
 </script>
 
