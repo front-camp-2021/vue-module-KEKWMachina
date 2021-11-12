@@ -1,14 +1,15 @@
 <template>
   <slider
-    v-model="range"
+    v-model="value"
     :min="priceRange[0]"
     :max="priceRange[1]"
     @change="$emit('set-price', setPriceRange())"
   />
 </template>
+
 <script>
 import Slider from "@vueform/slider";
-import { ref } from '@vue/reactivity';
+import { findMinMax } from "../helper-functions/findMinMax";
 export default {
   name: "PriceSlider",
   components: {
@@ -22,18 +23,18 @@ export default {
     priceRange: {
       type: Array,
       default: Function,
-    },
+    }
   },
-  setup(props) {
-    const range = ref(props.priceRange);
-    const setPriceRange = function() {
+  data: function () {
+    return {
+      value: findMinMax(this.cards),
+    };
+  },
+  methods: {
+    setPriceRange() {
       const values = document.querySelectorAll(".slider-tooltip");
       return [values[0].textContent, values[1].textContent];
-    }
-    return {
-      range,
-      setPriceRange,
-    }
+    },
   },
 };
 </script>

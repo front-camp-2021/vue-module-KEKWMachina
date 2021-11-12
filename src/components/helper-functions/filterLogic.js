@@ -4,6 +4,7 @@ export function filterData(
   brandFilters = [],
   originalArr = []
 ) {
+  //console.log(productsArr, categoryFilters.length, brandFilters.length, originalArr);
   if (categoryFilters.length === 0 && brandFilters.length === 0)
     return originalArr;
 

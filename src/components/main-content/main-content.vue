@@ -86,7 +86,6 @@ import PriceSlider from "../slider/price-slider.vue";
 import { filterUserInput } from "../helper-functions/filterUserInput.js";
 import { filterData } from "../helper-functions/filterLogic";
 import { findMinMax } from "../helper-functions/findMinMax";
-import { ref, onBeforeMount } from "@vue/runtime-core";
 export default {
   name: "MainContent",
   components: {
@@ -97,138 +96,107 @@ export default {
     Pagination,
     PriceSlider,
   },
-  setup() {
-    const cards = ref([]);
-    const categories = ref([]);
-    const brands = ref([]);
-    const filters = ref({
+  data: function () {
+    return {
+      cards: [],
+      cardsToRender: [],
+      categories: [],
+      brands: [],
       selectedCategories: [],
       selectedBrands: [],
-    });
-    const selectedCategories = ref([]);
-    const selectedBrands = ref([]);
-    const loading = ref(true);
-    const userInput = ref("");
-    const priceRange = ref([]);
-    const selectedPage = ref([0, 9, 1]);
-
-    onBeforeMount(async () => {
-      loading.value = true
-      await getCards()
-      await getCategories()
-      await getBrands()
-      loading.value = false
-    });
-
-    const getCards = async function() {
+      loading: true,
+      userInput: "",
+      priceRange: [],
+      selectedPriceRange: [],
+      selectedPage: [0, 9, 1],
+    };
+  },
+  async created() {
+    this.loading = true;
+    await this.getCards();
+    await this.getCategories();
+    await this.getBrands();
+    await this.setPriceRange();
+    this.loading = false;
+  },
+  methods: {
+    async getCards() {
       const request = await fetch("http://localhost:3001/products");
       const response = await request.json();
-      await cards.value.push(response);
-      await setPriceRange();
-    };
-    const getCategories = async function() {
+      this.cards.push(response);
+    },
+    async getCategories() {
       const request = await fetch("http://localhost:3001/categories");
       const response = await request.json();
-      categories.value.push(response);
-    };
-    const getBrands = async function() {
+      this.categories.push(response);
+    },
+    async getBrands() {
       const request = await fetch("http://localhost:3001/brands");
       const response = await request.json();
-      brands.value.push(response);
-    };
-    const setUserInput = function (input) {
-      setPage(0);
-      userInput.value = input;
-    };
-    const setFilter = function (name, type) {
-      setPage(0);
-      if (filters.value[type].includes(name)) {
-        filters.value[type] = filters.value[type].filter(
-          (value) => value !== name
-        );
+      this.brands.push(response);
+    },
+    setUserInput(input) {
+      this.setPage(0);
+      this.userInput = input;
+    },
+    setFilter(name, type) {
+      this.setPage(0);
+      if (this[type].includes(name)) {
+        this[type] = this[type].filter((value) => value !== name);
       } else {
-        filters.value[type] = [...filters.value[type], name];
+        this[type] = [...this[type], name];
       }
-      console.log(filters.value);
-    };
-    const isChecked = function (name, type) {
-      return [type].includes(name);
-    };
-    const setPrice = function (prices) {
-      setPage(0);
-      const selectedPriceRange = prices;
-      cards.value.push(
-        cards.value[0].filter((card) => {
-          return (
-            card.price >= selectedPriceRange[0] &&
-            card.price <= selectedPriceRange[1]
-          );
+    },
+    isChecked(name, type) {
+      return this[type].includes(name);
+    },
+    setPrice(prices) {
+      this.setPage(0);
+      this.selectedPriceRange = prices;
+      this.cards.push(
+        this.cards[0].filter((card) => {
+          return card.price >= this.selectedPriceRange[0] && card.price <= this.selectedPriceRange[1];
         })
       );
-    };
-    const setPriceRange = function () {
-      priceRange.value = findMinMax(cards.value[0]);
-    };
-    const setCardsForRender = function () {
-      return filterData(
-        filterUserInput(userInput.value, cards.value[cards.value.length - 1]),
-        filters.value.selectedCategories,
-        filters.value.selectedBrands,
-        filterUserInput(userInput.value, cards.value[cards.value.length - 1])
-      );
-    };
-    const setPage = function (page) {
-      selectedPage.value = [page * 9, (page + 1) * 9, page + 1];
-    };
-    const pageBack = function () {
-      selectedPage.value[0] -= 9;
-      selectedPage.value[1] -= 9;
-      selectedPage.value[2] -= 1;
-    };
-    const pageForward = function () {
-      selectedPage.value[0] += 9;
-      selectedPage.value[1] += 9;
-      selectedPage.value[2] += 1;
-    };
-    const resetSelections = function () {
-      setPage(0);
-      selectedCategories.value = [];
-      selectedBrands.value = [];
-      userInput.value = "";
-      document.querySelector(".searchfield__input").value = "";
-      document
-        .querySelectorAll(".filters__checkbox-square")
-        .forEach((checkbox) => (checkbox.checked = false));
+    },
+    setPriceRange() {
+      this.priceRange = findMinMax(this.cards[0]);
+    },
+    resetSelections() {
+      this.setPage(0);
+      this.selectedCategories = [];
+      this.selectedBrands = [];
+      this.userInput = '';
+      this.selectedPriceRange = [];
+      this.cards.push(this.cards[0]);
+      document.querySelector(".searchfield__input").value = '';
+      document.querySelectorAll(".filters__checkbox-square").forEach(checkbox => checkbox.checked = false);
       const prices = document.querySelectorAll(".slider-tooltip");
-      priceRange.value = findMinMax(cards.value[0]);
-      prices[0].textContent = priceRange.value[0];
-      prices[1].textContent = priceRange.value[1];
-    };
-
-    return {
-      cards,
-      categories,
-      brands,
-      selectedCategories,
-      selectedBrands,
-      loading,
-      userInput,
-      priceRange,
-      selectedPage,
-      getCards,
-      getCategories,
-      getBrands,
-      setUserInput,
-      setFilter,
-      isChecked,
-      setPrice,
-      setPriceRange,
-      resetSelections,
-      setCardsForRender,
-      pageBack,
-      setPage,
-      pageForward,
-    };
+      this.priceRange = findMinMax(this.cards[0]);
+      prices[0].textContent = this.priceRange[0];
+      prices[1].textContent = this.priceRange[1];
+    },
+    setCardsForRender() {
+      return filterData(
+        filterUserInput(this.userInput, this.cards[this.cards.length - 1]),
+        this.selectedCategories,
+        this.selectedBrands,
+        filterUserInput(this.userInput, this.cards[this.cards.length - 1])
+      )
+    },
+    setPage(page) {
+      this.selectedPage = [page * 9, (page + 1) * 9, page + 1];
+    },
+    pageBack() {
+      this.selectedPage[0] -= 9;
+      this.selectedPage[1] -= 9;
+      this.selectedPage[2] -= 1;
+    },
+    pageForward() {
+      this.selectedPage[0] += 9;
+      this.selectedPage[1] += 9;
+      this.selectedPage[2] += 1;
+    },
   },
 };
 </script>
