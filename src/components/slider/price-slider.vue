@@ -9,7 +9,6 @@
 <script>
 import Slider from "@vueform/slider";
 import { ref } from '@vue/reactivity';
-import { onBeforeMount } from '@vue/runtime-core';
 export default {
   name: "PriceSlider",
   components: {

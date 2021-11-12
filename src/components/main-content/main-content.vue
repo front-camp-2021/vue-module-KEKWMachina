@@ -86,7 +86,7 @@ import PriceSlider from "../slider/price-slider.vue";
 import { filterUserInput } from "../helper-functions/filterUserInput.js";
 import { filterData } from "../helper-functions/filterLogic";
 import { findMinMax } from "../helper-functions/findMinMax";
-import { watchEffect, ref } from "@vue/runtime-core";
+import { ref, onBeforeMount } from "@vue/runtime-core";
 export default {
   name: "MainContent",
   components: {
@@ -112,25 +112,30 @@ export default {
     const priceRange = ref([]);
     const selectedPage = ref([0, 9, 1]);
 
-    watchEffect(async () => {
+    onBeforeMount(async () => {
+      loading.value = true
+      await getCards()
+      await getCategories()
+      await getBrands()
+      loading.value = false
+    });
+
+    const getCards = async function() {
       const request = await fetch("http://localhost:3001/products");
       const response = await request.json();
       await cards.value.push(response);
       await setPriceRange();
-      loading.value = false;
-    });
-    watchEffect(async () => {
+    };
+    const getCategories = async function() {
       const request = await fetch("http://localhost:3001/categories");
       const response = await request.json();
       categories.value.push(response);
-      loading.value = false;
-    });
-    watchEffect(async () => {
+    };
+    const getBrands = async function() {
       const request = await fetch("http://localhost:3001/brands");
       const response = await request.json();
       brands.value.push(response);
-      loading.value = false;
-    });
+    };
     const setUserInput = function (input) {
       setPage(0);
       userInput.value = input;
@@ -185,9 +190,6 @@ export default {
       selectedPage.value[1] += 9;
       selectedPage.value[2] += 1;
     };
-    const getCards = function () {
-      return [cards.value[cards.value.length - 1], priceRange.value];
-    };
     const resetSelections = function () {
       setPage(0);
       selectedCategories.value = [];
@@ -214,6 +216,8 @@ export default {
       priceRange,
       selectedPage,
       getCards,
+      getCategories,
+      getBrands,
       setUserInput,
       setFilter,
       isChecked,
