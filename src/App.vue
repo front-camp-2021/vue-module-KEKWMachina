@@ -1,20 +1,20 @@
 <template>
-  <div class="app-wrapper">
-    <header-logo />
-    <breadcrumbs />
-    <main-content />
+  <div>
+    <Header />
+    <Breadcrumbs />
+    <MainContent />
   </div>
 </template>
 
 <script>
+import Header from "./components/header/header.vue";
 import Breadcrumbs from "./components/breadcrumbs/breadcrumbs.vue";
 import MainContent from "./components/main-content/main-content.vue";
-import HeaderLogo from "./components/header-logo/header-logo.vue"
 
 export default {
   name: "App",
   components: {
-    HeaderLogo,
+    Header,
     Breadcrumbs,
     MainContent,
   },

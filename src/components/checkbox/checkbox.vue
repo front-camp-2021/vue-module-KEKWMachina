@@ -1,20 +1,20 @@
 <template>
-  <div class="filters__checkbox">
+  <div
+    class="filters__checkbox"
+    @click="addFilter($event)"
+  >
     <input
       :id="itemName"
       type="checkbox"
       :name="name"
       class="filters__checkbox-square"
-      :checked="checked"
-      @change="$emit('set-filter', itemName, name)"
     >
     <label
       class="filters__checkbox-label"
       :for="itemName"
-    >
-      {{
-        itemName
-      }}
+    >{{
+      itemName
+    }}
     </label>
   </div>
 </template>
@@ -30,11 +30,28 @@ export default {
     name: {
       type: String,
       default: "",
-    },
-    checked: {
-      type: Boolean,
-      default: false,
     }
+  },
+  methods: {
+    addFilter(event) {
+      const formattedItem = event.target.id.toLowerCase().split(" ").join("_");
+      if (event.target.type === "checkbox") {
+        this.$store.commit("setPage", 0);
+        if (event.target.name === "categories") {
+          if (event.target.checked) {
+            this.$store.commit("addCategory", formattedItem);
+          } else {
+            this.$store.commit("removeCategory", formattedItem);
+          }
+        } else if (event.target.name === "brands") {
+          if (event.target.checked) {
+            this.$store.commit("addBrand", formattedItem);
+          } else {
+            this.$store.commit("removeBrand", formattedItem);
+          }
+        }
+      }
+    },
   },
 };
 </script>

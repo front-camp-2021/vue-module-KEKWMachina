@@ -5,7 +5,7 @@
       type="text"
       name="filter"
       placeholder="Search"
-      @input="$emit('on-input', $event.target.value)"
+      @input="setSearchInput($event)"
     >
   </div>
 </template>
@@ -13,11 +13,11 @@
 <script>
 export default {
   name: "Searchfield",
-  props: {
-    modelValue: {
-      type: String,
-      default: ""
-    }
+  methods: {
+    setSearchInput(event) {
+      this.$store.commit("setUserInput", event.target.value);
+      this.$store.commit("setPage", 0);
+    },
   },
 };
 </script>

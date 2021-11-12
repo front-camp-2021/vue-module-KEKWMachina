@@ -1,64 +1,58 @@
 <template>
-  <div v-if="!loading">
-    <main-content-nav :items-found="setCardsForRender().length" />
+  <div
+    v-if="$store.state.cardData[0] && $store.state.brandsData[0] && $store.state.categoriesData[0]"
+  >
+    <MainContentNav :items-found="cardsToRender().length" />
     <div class="main-content">
       <div class="filters">
         <div class="filters__main">
           <div class="filters__slider">
-            <price-slider 
-              :cards="cards[0]" 
-              :price-range="priceRange"
-              @set-price="setPrice" 
-            />
+            <PriceSlider />
           </div>
           <div class="filters__category">
             <h5 class="filters__section-header">
               Categories
             </h5>
-            <checkbox
-              v-for="item in categories[0]"
+            <Checkbox
+              v-for="item in $store.state.categoriesData[0]"
               :key="item"
               :item-name="item"
-              name="selectedCategories"
-              :checked="isChecked(item, 'categories')"
-              @set-filter="setFilter"
+              :name="'categories'"
             />
           </div>
           <div class="filters_line" />
           <div class="filters__category">
-            <h5 class="filters__section-header">
-              Brands
+            <h5 class="filters__section-header"> 
+              Brands 
             </h5>
-            <checkbox
-              v-for="item in brands[0]"
-              :key="item.id"
+            <Checkbox
+              v-for="item in $store.state.brandsData[0]"
+              :key="item"
               :item-name="item"
-              name="selectedBrands"
-              :checked="isChecked(item, 'brands')"
-              @set-filter="setFilter"
+              :name="'brands'"
             />
           </div>
         </div>
-        <button 
-          class="filters__filters-reset-button"
-          @click="resetSelections()"
-        >
+        <button class="filters__filters-reset-button">
           Reset Filters
         </button>
       </div>
       <div class="cards">
-        <searchfield @on-input="setUserInput" />
+        <Searchfield />
         <div 
-          v-if="cards[0]" 
+          v-if="$store.state.cardData[0]"
           class="merchandise-cards"
         >
-          <card
-            v-for="card in setCardsForRender().slice(selectedPage[0], selectedPage[1])"
+          <Card
+            v-for="card in cardsToRender().slice(
+              getPages()[0],
+              getPages()[1]
+            )"
             :key="card.id"
             :card-data="card"
           />
           <div
-            v-if="setCardsForRender().length === 0"
+            v-if="cardsToRender().length === 0"
             class="merchandise-cards__filters-error-message"
           >
             Nothing found, please, reset your filters and try again.
@@ -66,13 +60,7 @@
         </div>
       </div>
     </div>
-    <pagination 
-      :card-data="setCardsForRender()"
-      :active-page="selectedPage[2]"
-      @set-page="setPage"
-      @page-back="pageBack"
-      @page-forward="pageForward"
-    />
+    <Pagination :card-data="cardsToRender()" />
   </div>
 </template>
 
@@ -85,7 +73,6 @@ import Pagination from "../pagination/pagination.vue";
 import PriceSlider from "../slider/price-slider.vue";
 import { filterUserInput } from "../helper-functions/filterUserInput.js";
 import { filterData } from "../helper-functions/filterLogic";
-import { findMinMax } from "../helper-functions/findMinMax";
 export default {
   name: "MainContent",
   components: {
@@ -96,106 +83,47 @@ export default {
     Pagination,
     PriceSlider,
   },
-  data: function () {
-    return {
-      cards: [],
-      cardsToRender: [],
-      categories: [],
-      brands: [],
-      selectedCategories: [],
-      selectedBrands: [],
-      loading: true,
-      userInput: "",
-      priceRange: [],
-      selectedPriceRange: [],
-      selectedPage: [0, 9, 1],
-    };
-  },
-  async created() {
-    this.loading = true;
-    await this.getCards();
-    await this.getCategories();
-    await this.getBrands();
-    await this.setPriceRange();
-    this.loading = false;
+  beforeMount() {
+    this.initData();
   },
   methods: {
-    async getCards() {
-      const request = await fetch("http://localhost:3001/products");
-      const response = await request.json();
-      this.cards.push(response);
+    initData() {
+      this.$store.dispatch("setCardData");
+      this.$store.dispatch("setCategoriesData");
+      this.$store.dispatch("setBrandsData");
     },
-    async getCategories() {
-      const request = await fetch("http://localhost:3001/categories");
-      const response = await request.json();
-      this.categories.push(response);
+    pagesCount() {
+      return [
+        ...Array(
+          Math.ceil(
+            this.$store.state.cardData[this.$store.state.cardData.length - 1]
+              .length / 9
+          )
+        ).keys(),
+      ];
     },
-    async getBrands() {
-      const request = await fetch("http://localhost:3001/brands");
-      const response = await request.json();
-      this.brands.push(response);
-    },
-    setUserInput(input) {
-      this.setPage(0);
-      this.userInput = input;
-    },
-    setFilter(name, type) {
-      this.setPage(0);
-      if (this[type].includes(name)) {
-        this[type] = this[type].filter((value) => value !== name);
-      } else {
-        this[type] = [...this[type], name];
-      }
-    },
-    isChecked(name, type) {
-      return this[type].includes(name);
-    },
-    setPrice(prices) {
-      this.setPage(0);
-      this.selectedPriceRange = prices;
-      this.cards.push(
-        this.cards[0].filter((card) => {
-          return card.price >= this.selectedPriceRange[0] && card.price <= this.selectedPriceRange[1];
-        })
+    filterInput(cardsData) {
+      return filterUserInput(
+        this.$store.state.userInput[this.$store.state.userInput.length - 1],
+        cardsData
       );
     },
-    setPriceRange() {
-      this.priceRange = findMinMax(this.cards[0]);
+    getPages() {
+      return this.$store.state.activePage[
+        this.$store.state.activePage.length - 1
+      ];
     },
-    resetSelections() {
-      this.setPage(0);
-      this.selectedCategories = [];
-      this.selectedBrands = [];
-      this.userInput = '';
-      this.selectedPriceRange = [];
-      this.cards.push(this.cards[0]);
-      document.querySelector(".searchfield__input").value = '';
-      document.querySelectorAll(".filters__checkbox-square").forEach(checkbox => checkbox.checked = false);
-      const prices = document.querySelectorAll(".slider-tooltip");
-      this.priceRange = findMinMax(this.cards[0]);
-      prices[0].textContent = this.priceRange[0];
-      prices[1].textContent = this.priceRange[1];
-    },
-    setCardsForRender() {
+    cardsToRender() {
       return filterData(
-        filterUserInput(this.userInput, this.cards[this.cards.length - 1]),
-        this.selectedCategories,
-        this.selectedBrands,
-        filterUserInput(this.userInput, this.cards[this.cards.length - 1])
-      )
-    },
-    setPage(page) {
-      this.selectedPage = [page * 9, (page + 1) * 9, page + 1];
-    },
-    pageBack() {
-      this.selectedPage[0] -= 9;
-      this.selectedPage[1] -= 9;
-      this.selectedPage[2] -= 1;
-    },
-    pageForward() {
-      this.selectedPage[0] += 9;
-      this.selectedPage[1] += 9;
-      this.selectedPage[2] += 1;
+        this.filterInput(
+          this.$store.state.cardData[this.$store.state.cardData.length - 1]
+        ),
+        this.$store.state.selectedCategories,
+        this.$store.state.selectedBrands,
+        this.filterInput(
+          this.$store.state.cardData[this.$store.state.cardData.length - 1]
+        )
+      );
     },
   },
 };

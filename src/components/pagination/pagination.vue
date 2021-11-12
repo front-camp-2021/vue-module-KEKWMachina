@@ -1,24 +1,32 @@
 <template>
   <div class="pagination">
     <button
-      v-if="activePage !== 1"
+      v-if="
+        $store.state.activePage[
+          $store.state.activePage.length - 1
+        ][2] !== 1
+      "
       class="pagination__button-page-back"
-      @click="$emit('page-back')"
+      @click="pageBack()"
     />
     <div class="pagination__main">
       <button
         v-for="page in pagesCount()"
         :key="page"
         :class="assingClass(page)"
-        @click="$emit('set-page', page)"
+        @click="setPage(page)"
       >
         {{ page + 1 }}
       </button>
     </div>
     <button
-      v-if="activePage !== Math.ceil(cardData.length / 9)"
+      v-if="
+        $store.state.activePage[
+          $store.state.activePage.length - 1
+        ][2] !== Math.ceil(cardData.length / 9)
+      "
       class="pagination__button-page-forward"
-      @click="$emit('page-forward')"
+      @click="pageForward()"
     />
   </div>
 </template>
@@ -30,22 +38,36 @@ export default {
     cardData: {
       type: Object,
       default: Function,
-    },
-    activePage: {
-      type: Number,
-      default: 1,
-    },
+    }
   },
   methods: {
     pagesCount() {
       return [...Array(Math.ceil(this.cardData.length / 9)).keys()];
     },
     assingClass(page) {
-      if (page + 1 === this.activePage) {
+      if (
+        page + 1 ===
+        this.$store.state.activePage[this.$store.state.activePage.length - 1][2]
+      ) {
         return "pagination__page active";
       } else {
         return "pagination__page";
       }
+    },
+    setPage(page) {
+      this.$store.commit("setPage", page);
+    },
+    pageBack() {
+      this.$store.commit(
+        "pageBack",
+        this.$store.state.activePage[this.$store.state.activePage.length - 1]
+      );
+    },
+    pageForward() {
+      this.$store.commit(
+        "pageForward",
+        this.$store.state.activePage[this.$store.state.activePage.length - 1]
+      );
     },
   },
 };

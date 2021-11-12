@@ -1,9 +1,9 @@
 <template>
-  <slider
+  <Slider
     v-model="value"
-    :min="priceRange[0]"
-    :max="priceRange[1]"
-    @change="$emit('set-price', setPriceRange())"
+    :min="setMinMax()[0]"
+    :max="setMinMax()[1]"
+    @change="setPriceRange()"
   />
 </template>
 
@@ -15,25 +15,19 @@ export default {
   components: {
     Slider,
   },
-  props: {
-    cards: {
-      type: Array,
-      default: Function,
-    },
-    priceRange: {
-      type: Array,
-      default: Function,
-    }
-  },
   data: function () {
     return {
-      value: findMinMax(this.cards),
+      value: this.setMinMax(),
     };
   },
   methods: {
     setPriceRange() {
       const values = document.querySelectorAll(".slider-tooltip");
-      return [values[0].textContent, values[1].textContent];
+      this.$store.commit("filterByPrice", values);
+      this.$store.commit("setPage", 0);
+    },
+    setMinMax() {
+      return findMinMax(this.$store.state.cardData[0]);
     },
   },
 };
