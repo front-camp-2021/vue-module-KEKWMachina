@@ -1,5 +1,24 @@
+@import "./varibles.scss";
+
 :root {
   --slider-connect-bg: #7e72f2;
   --slider-tooltip-bg: #7e72f2;
   --slider-handle-ring-color: #7e72f2;
+}
+
+.merchandise-cards__tooltip {
+  visibility: hidden;
+  position: relative;
+  bottom: 8px;
+  width: 90%;
+  text-align: center;
+  background-color: #ededed;
+  color: #2c2c2c;
+  border-radius: 6px;
+  padding: 5px 0;
+  z-index: 2;
+}
+
+.merchandise-cards__item-name:hover .merchandise-cards__tooltip {
+  visibility: visible; 
 }

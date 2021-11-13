@@ -5,10 +5,10 @@
       <div class="filters">
         <div class="filters__main">
           <div class="filters__slider">
-            <price-slider 
-              :cards="cards[0]" 
+            <price-slider
+              :cards="cards[0]"
               :price-range="priceRange"
-              @set-price="setPrice" 
+              @set-price="setPrice"
             />
           </div>
           <div class="filters__category">
@@ -39,7 +39,7 @@
             />
           </div>
         </div>
-        <button 
+        <button
           class="filters__filters-reset-button"
           @click="resetSelections()"
         >
@@ -53,7 +53,10 @@
           class="merchandise-cards"
         >
           <card
-            v-for="card in setCardsForRender().slice(selectedPage[0], selectedPage[1])"
+            v-for="card in setCardsForRender().slice(
+              selectedPage[0],
+              selectedPage[1]
+            )"
             :key="card.id"
             :card-data="card"
           />
@@ -66,7 +69,7 @@
         </div>
       </div>
     </div>
-    <pagination 
+    <pagination
       :card-data="setCardsForRender()"
       :active-page="selectedPage[2]"
       @set-page="setPage"
@@ -113,25 +116,25 @@ export default {
     const selectedPage = ref([0, 9, 1]);
 
     onBeforeMount(async () => {
-      loading.value = true
-      await getCards()
-      await getCategories()
-      await getBrands()
-      loading.value = false
+      loading.value = true;
+      await getCards();
+      await getCategories();
+      await getBrands();
+      loading.value = false;
     });
 
-    const getCards = async function() {
+    const getCards = async function () {
       const request = await fetch("http://localhost:3001/products");
       const response = await request.json();
       await cards.value.push(response);
       await setPriceRange();
     };
-    const getCategories = async function() {
+    const getCategories = async function () {
       const request = await fetch("http://localhost:3001/categories");
       const response = await request.json();
       categories.value.push(response);
     };
-    const getBrands = async function() {
+    const getBrands = async function () {
       const request = await fetch("http://localhost:3001/brands");
       const response = await request.json();
       brands.value.push(response);
@@ -234,19 +237,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "/src/assets/styles/varibles.scss";
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap");
-
-$page-background-color: #f9f9f9;
-$elements-main-color: #ffffff;
-$button-primary-color: #6f64f8;
-$button-secondary-color: #ededed;
-$main-text-color: #2c2c2c;
-$secondary-text-color: #7e72f2;
-$shadow-color: grey;
-
-$font-weight-light: 300;
-$font-weight-medium: 400;
-$font-weight-large: 600;
 
 .main-content {
   display: flex;
@@ -376,7 +368,7 @@ $font-weight-large: 600;
           .merchandise-cards__image {
             max-height: 130px !important;
           }
-
+          
           .merchandise-cards__buttons {
             .merchandise-cards__wishlist-button {
               font-size: 9px;
@@ -386,6 +378,7 @@ $font-weight-large: 600;
               font-size: 9px;
             }
           }
+
         }
       }
     }

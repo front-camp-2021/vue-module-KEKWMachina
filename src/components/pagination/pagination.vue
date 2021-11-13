@@ -30,7 +30,7 @@ export default {
   props: {
     cardData: {
       type: Object,
-      default: Function,
+      default: () => {},
     },
     activePage: {
       type: Number,
@@ -51,35 +51,12 @@ export default {
       assingClass
     }
   }
-  /*methods: {
-    pagesCount() {
-      return [...Array(Math.ceil(this.cardData.length / 9)).keys()];
-    },
-    assingClass(page) {
-      if (page + 1 === this.activePage) {
-        return "pagination__page active";
-      } else {
-        return "pagination__page";
-      }
-    },
-  },*/
 };
 </script>
 
 <style scoped lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap");
-
-$page-background-color: #f9f9f9;
-$elements-main-color: #ffffff;
-$button-primary-color: #6f64f8;
-$button-secondary-color: #ededed;
-$main-text-color: #2c2c2c;
-$secondary-text-color: #7e72f2;
-$shadow-color: grey;
-
-$font-weight-light: 300;
-$font-weight-medium: 400;
-$font-weight-large: 600;
+@import "/src/assets/styles/varibles.scss";
 
 .pagination {
   display: flex;

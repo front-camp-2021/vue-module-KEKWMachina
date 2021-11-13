@@ -17,11 +17,11 @@ export default {
   props: {
     cards: {
       type: Array,
-      default: Function,
+      default: () => [],
     },
     priceRange: {
       type: Array,
-      default: Function,
+      default: () => [],
     },
   },
   setup(props) {

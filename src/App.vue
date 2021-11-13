@@ -9,7 +9,7 @@
 <script>
 import Breadcrumbs from "./components/breadcrumbs/breadcrumbs.vue";
 import MainContent from "./components/main-content/main-content.vue";
-import HeaderLogo from "./components/header-logo/header-logo.vue"
+import HeaderLogo from "./components/header-logo/header-logo.vue";
 
 export default {
   name: "App",
