@@ -13,14 +13,10 @@
         {{ itemsFound }} Results Found
       </div>
       <div class="search-results__btn-container">
-        <button
-          class="search-results__discount"
-          routerLink="/discounted"
-        />
-        <button
-          class="search-results__wishlist-button"
-          routerLink="/wishlist"
-        />
+        <router-link to="/products/discounts">
+          <button class="search-results__discount" />
+        </router-link>
+        <button class="search-results__wishlist-button" />
       </div>
     </div>
   </div>
@@ -33,8 +29,8 @@ export default {
     itemsFound: {
       type: Number,
       default: 0,
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -106,8 +102,7 @@ export default {
       width: 25px;
       border: none;
       border-radius: 4px;
-      background-color: $button-primary-color;
-      background-image: url(~@/assets/img/add-to-cart-img.svg);
+      background-image: url(~@/assets/img/discount-btn.svg);
       background-repeat: no-repeat;
       background-position: bottom 50% left 50%;
       cursor: pointer;

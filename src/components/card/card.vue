@@ -5,20 +5,24 @@
       :src="cardData.images[0]"
       :alt="cardData.title"
     >
+    <router-link :to="{ name: `Product`, params: { cardId: cardData.id }}">
+      <button class="merchandise-cards__link" />
+    </router-link>
     <div class="merchandise-cards__rating-and-price">
-      <div class="merchandise-cards__rating"> 
-        {{ cardData.rating }} 
+      <div class="merchandise-cards__rating">
+        {{ cardData.rating }}
       </div>
-      <div class="merchandise-cards__price">
-        ₴{{ cardData.price }}
-      </div>
+      <div 
+        v-discount="cardData" 
+        class="merchandise-cards__price" 
+      />
     </div>
     <ul class="merchandise-cards__item-descriptions">
       <li 
-        v-ellipsis="cardData.title"
+        v-ellipsis="cardData.title" 
         class="merchandise-cards__item-name"
       >
-        {{ cardData.title }}>
+        {{ cardData.title }}
       </li>
       <li class="merchandise-cards__item-description">
         Redesigned from scratch and completely revised.
@@ -36,17 +40,19 @@
 </template>
 
 <script>
-import { ellipsis } from "../directives/v-ellipsis"
+import { ellipsis } from "../directives/v-ellipsis";
+import { discount } from "../directives/v-discount";
 export default {
   name: "Card",
   directives: {
     ellipsis,
+    discount,
   },
   props: {
-    cardData : {
-    type: Object,
-    default: () => {},
-    }
+    cardData: {
+      type: Object,
+      default: () => {},
+    },
   },
 };
 </script>
@@ -71,6 +77,22 @@ export default {
     margin-bottom: 40px;
     max-height: 180px;
     max-width: 180px;
+  }
+
+  .merchandise-cards__link {
+    border-radius: 4px;
+    border: none;
+    height: 30px;
+    width: 30px;
+    background-image: url(~@/assets/img/item-page-link.svg);
+    background-color: $button-primary-color;
+    background-size: 25px;
+    background-repeat: no-repeat;
+    background-position: left 25% bottom 50%;
+    cursor: pointer;
+    position: absolute;
+    top: 12px;
+    right: 12px;
   }
 
   .merchandise-cards__rating-and-price {
@@ -111,9 +133,10 @@ export default {
     bottom: 60px;
 
     .merchandise-cards__item-name {
-      max-height: 40px;
-      
-      
+      position: relative;
+      bottom: 20px;
+      max-height: 20px;
+      max-width: 95%;
       z-index: 2;
       font-size: 16px;
       line-height: 19px;
@@ -122,12 +145,12 @@ export default {
 
       .merchandise-cards__tooltip {
         visibility: hidden;
-        
+        position: relative;
         bottom: 8px;
         width: 90%;
-        background-color: $button-secondary-color;
-        color: $main-text-color;
         text-align: center;
+        background-color: #ededed;
+        color: #2c2c2c;
         border-radius: 6px;
         padding: 5px 0;
         z-index: 2;
@@ -135,18 +158,17 @@ export default {
     }
 
     .merchandise-cards__item-name:hover .merchandise-cards__tooltip {
-      visibility: visible; 
+      visibility: visible;
     }
 
     .merchandise-cards__item-description {
       position: relative;
       z-index: 0;
-      
+
       font-size: 12px;
       line-height: 14px;
       font-weight: $font-weight-light;
     }
-
   }
 
   .merchandise-cards__buttons {

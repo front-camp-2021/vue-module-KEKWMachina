@@ -2,13 +2,12 @@
   <div class="app-wrapper">
     <header-logo />
     <breadcrumbs />
-    <main-content />
+    <router-view />
   </div>
 </template>
 
 <script>
 import Breadcrumbs from "./components/breadcrumbs/breadcrumbs.vue";
-import MainContent from "./components/main-content/main-content.vue";
 import HeaderLogo from "./components/header-logo/header-logo.vue";
 
 export default {
@@ -16,26 +15,19 @@ export default {
   components: {
     HeaderLogo,
     Breadcrumbs,
-    MainContent,
   },
 };
 </script>
 
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap");
-@import "./assets/styles/global.css";
+@import "/src/assets/styles/varibles.scss";
 
-$page-background-color: #f9f9f9;
-$elements-main-color: #ffffff;
-$button-primary-color: #6f64f8;
-$button-secondary-color: #ededed;
-$main-text-color: #2c2c2c;
-$secondary-text-color: #7e72f2;
-$shadow-color: grey;
-
-$font-weight-light: 300;
-$font-weight-medium: 400;
-$font-weight-large: 600;
+:root {
+  --slider-connect-bg: #7e72f2;
+  --slider-tooltip-bg: #7e72f2;
+  --slider-handle-ring-color: #7e72f2;
+}
 
 body {
   background-color: $page-background-color;
@@ -58,6 +50,20 @@ body {
 
     .cards {
       width: 75%;
+
+      .merchandise-cards {
+        .merchandise-cards__card {
+          .merchandise-cards__buttons {
+            .merchandise-cards__wishlist-button {
+              font-size: 12px;
+            }
+
+            .merchandise-cards__add-to-cart-button {
+              font-size: 12px;
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -305,6 +311,31 @@ body {
           background-color: $button-primary-color;
           border-radius: 50%;
         }
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .merchandise-cards__card {
+    height: 350px;
+
+    .merchandise-cards__image {
+      max-height: 130px !important;
+    }
+
+    .merchandise-cards__rating-and-price {
+      .merchandise-cards__rating {
+        background-size: 15px;
+      }
+    }
+    .merchandise-cards__buttons {
+      .merchandise-cards__wishlist-button {
+        font-size: 9px;
+      }
+
+      .merchandise-cards__add-to-cart-button {
+        font-size: 9px;
       }
     }
   }

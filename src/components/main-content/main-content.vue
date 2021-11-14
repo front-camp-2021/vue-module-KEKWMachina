@@ -90,6 +90,7 @@ import { filterUserInput } from "../helper-functions/filterUserInput.js";
 import { filterData } from "../helper-functions/filterLogic";
 import { findMinMax } from "../helper-functions/findMinMax";
 import { ref, onBeforeMount } from "@vue/runtime-core";
+import { useStore } from 'vuex';
 export default {
   name: "MainContent",
   components: {
@@ -114,12 +115,14 @@ export default {
     const userInput = ref("");
     const priceRange = ref([]);
     const selectedPage = ref([0, 9, 1]);
+    const store = useStore();
 
     onBeforeMount(async () => {
       loading.value = true;
       await getCards();
       await getCategories();
       await getBrands();
+      await store.commit("setCards", cards.value[0]);
       loading.value = false;
     });
 
@@ -236,7 +239,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @import "/src/assets/styles/varibles.scss";
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap");
 
@@ -340,11 +343,38 @@ export default {
 
     .cards {
       width: 75%;
+
+      .merchandise-cards {
+        .merchandise-cards__card {
+          .merchandise-cards__buttons {
+            .merchandise-cards__wishlist-button {
+              font-size: 12px;
+            }
+
+            .merchandise-cards__add-to-cart-button {
+              font-size: 12px;
+            }
+          }
+        }
+      }
     }
   }
 }
 
 @media (max-width: 1024px) {
+  .header {
+    .header__logo {
+      width: 70px;
+      height: 50px;
+    }
+
+    .header__text {
+      font-size: 40px;
+      line-height: 20px;
+      color: $secondary-text-color;
+    }
+  }
+
   .main-content {
     height: 1885px;
 
@@ -368,7 +398,7 @@ export default {
           .merchandise-cards__image {
             max-height: 130px !important;
           }
-          
+
           .merchandise-cards__buttons {
             .merchandise-cards__wishlist-button {
               font-size: 9px;
@@ -378,7 +408,6 @@ export default {
               font-size: 9px;
             }
           }
-
         }
       }
     }
@@ -457,6 +486,19 @@ export default {
 }
 
 @media (max-width: 769px) {
+  .header {
+    .header__logo {
+      width: 70px;
+      height: 50px;
+    }
+
+    .header__text {
+      font-size: 40px;
+      line-height: 20px;
+      color: $secondary-text-color;
+    }
+  }
+
   .main-content {
     height: 1920px;
 
@@ -567,7 +609,45 @@ export default {
   }
 }
 
+@media (max-width: 600px) {
+  .merchandise-cards__card {
+    height: 350px;
+
+    .merchandise-cards__image {
+      max-height: 130px !important;
+    }
+
+    .merchandise-cards__rating-and-price {
+      .merchandise-cards__rating {
+        background-size: 15px;
+      }
+    }
+    .merchandise-cards__buttons {
+      .merchandise-cards__wishlist-button {
+        font-size: 9px;
+      }
+
+      .merchandise-cards__add-to-cart-button {
+        font-size: 9px;
+      }
+    }
+  }
+}
+
 @media (max-width: 426px) {
+  .header {
+    .header__logo {
+      width: 65px;
+      height: 45px;
+    }
+
+    .header__text {
+      font-size: 25px;
+      line-height: 18px;
+      color: $secondary-text-color;
+    }
+  }
+
   .main-content-nav {
     flex-direction: column;
 

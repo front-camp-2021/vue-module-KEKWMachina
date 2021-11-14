@@ -5,7 +5,7 @@ export const ellipsis = {
         const tooltip = document.createElement("p");
         tooltip.className = "merchandise-cards__tooltip";
         tooltip.innerText = bindings.value;
-        el.textContent = bindings.value.slice(0, 40) + "...";
+        el.textContent = bindings.value.slice(0, 35) + "...";
         el.appendChild(tooltip);
     }
   },

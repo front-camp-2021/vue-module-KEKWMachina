@@ -10,7 +10,8 @@
             "rating": 2.89,
             "price": 15999,
             "category": "laptops",
-            "brand": "acer"
+            "brand": "acer",
+            "discount": 8
         },
         {
             "id": "qeagrlm9lrkr9kjkav",
@@ -34,7 +35,8 @@
             "rating": 2.42,
             "price": 22999,
             "category": "laptops",
-            "brand": "acer"
+            "brand": "acer",
+            "discount": 15
         },
         {
             "id": "cvr29caokhhkr9kjkav",
@@ -57,7 +59,8 @@
             "rating": 3.2,
             "price": 22500,
             "category": "laptops",
-            "brand": "acer"
+            "brand": "acer",
+            "discount": 10
         },
         {
             "id": "4g0lv7ii7ytkr9kjkav",
@@ -177,7 +180,8 @@
             "rating": 2.65,
             "price": 36500,
             "category": "laptops",
-            "brand": "asus"
+            "brand": "asus",
+            "discount": 5
         },
         {
             "id": "8lxdgefbn0hkr9kjkav",
@@ -234,7 +238,8 @@
             "rating": 1.57,
             "price": 15500,
             "category": "laptops",
-            "brand": "dell"
+            "brand": "dell",
+            "discount": 13
         },
         {
             "id": "4rtmbvjt2lekr9kjkav",
@@ -268,7 +273,8 @@
             "rating": 1.85,
             "price": 9500,
             "category": "laptops",
-            "brand": "lenovo"
+            "brand": "lenovo",
+            "discount": 20
         },
         {
             "id": "sgmj070kykkr9kjkav",
@@ -303,7 +309,8 @@
             "rating": 1.14,
             "price": 3800,
             "category": "laptops",
-            "brand": "asus"
+            "brand": "asus",
+            "discount": 15
         },
         {
             "id": "ci0q634ou8kr9kjkav",
@@ -406,7 +413,8 @@
             "rating": 1.16,
             "price": 14200,
             "category": "monitors",
-            "brand": "benq"
+            "brand": "benq",
+            "discount": 20
         },
         {
             "id": "r5pyc7y91djkr9kjkav",
@@ -473,7 +481,8 @@
             "rating": 2.66,
             "price": 59000,
             "category": "video_cards",
-            "brand": "msi"
+            "brand": "msi",
+            "discount": 25
         },
         {
             "id": "q2dbkr3tvmnkr9kjkav",
@@ -506,7 +515,8 @@
             "rating": 3.01,
             "price": 85000,
             "category": "video_cards",
-            "brand": "msi"
+            "brand": "msi",
+            "discount": 10
         },
         {
             "id": "s7px0qga2sqkr9kjkav",
@@ -529,7 +539,8 @@
             "rating": 2.04,
             "price": 28000,
             "category": "video_cards",
-            "brand": "asus"
+            "brand": "asus",
+            "discount": 10
         },
         {
             "id": "mnrntvpjpupkr9kjkav",
@@ -621,7 +632,8 @@
             "rating": 3.15,
             "price": 67000,
             "category": "video_cards",
-            "brand": "gigabyte"
+            "brand": "gigabyte",
+            "discount": 15
         },
         {
             "id": "kf6yp1y9b1kr9kjkav",

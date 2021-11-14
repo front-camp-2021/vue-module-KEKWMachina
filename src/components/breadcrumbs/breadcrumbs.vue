@@ -1,6 +1,8 @@
 <template>
   <div class="breadcrumbs">
-    <div class="breadcrumbs__home-button" />
+    <router-link to="/products">
+      <div class="breadcrumbs__home-button" />
+    </router-link>
     <div class="breadcrumbs__arrows" />
     <div class="breadcrumbs__active-page">
       eCommerce
