@@ -96,8 +96,9 @@ export default {
       background-color: $button-primary-color;
       border-radius: 50%;
     }
+  }
 
-    .pagination__page {
+      &__page {
       height: 37px;
       width: 37px;
       text-decoration: none;
@@ -112,6 +113,5 @@ export default {
         border-radius: 50%;
       }
     }
-  }
 }
 </style>

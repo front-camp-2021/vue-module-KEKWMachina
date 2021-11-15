@@ -5,7 +5,7 @@
       :src="cardData.images[0]"
       :alt="cardData.title"
     >
-    <router-link :to="{ name: `Product`, params: { cardId: cardData.id }}">
+    <router-link :to="{ name: `Product`, params: { cardId: cardData.id } }">
       <button class="merchandise-cards__link" />
     </router-link>
     <div class="merchandise-cards__rating-and-price">
@@ -61,25 +61,26 @@ export default {
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap");
 @import "/src/assets/styles/varibles.scss";
 
-.merchandise-cards__card {
-  z-index: 0;
-  filter: drop-shadow(-0.4px 0.5px 0.05rem $shadow-color);
-  position: relative;
-  text-align: center;
-  height: 400px;
+.merchandise-cards {
+  &__card {
+    z-index: 0;
+    filter: drop-shadow(-0.4px 0.5px 0.05rem $shadow-color);
+    position: relative;
+    text-align: center;
+    height: 400px;
 
-  background-color: $elements-main-color;
-  border-radius: 4px;
-  margin-bottom: 20px;
-
-  .merchandise-cards__image {
+    background-color: $elements-main-color;
+    border-radius: 4px;
+    margin-bottom: 20px;
+  }
+  &__image {
     margin-top: 20px;
     margin-bottom: 40px;
     max-height: 180px;
     max-width: 180px;
   }
 
-  .merchandise-cards__link {
+  &__link {
     border-radius: 4px;
     border: none;
     height: 30px;
@@ -95,34 +96,34 @@ export default {
     right: 12px;
   }
 
-  .merchandise-cards__rating-and-price {
+  &__rating-and-price {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin: 0% 10% 0% 10%;
-
-    .merchandise-cards__rating {
-      bottom: 150px;
-      position: absolute;
-      color: $elements-main-color;
-      padding: 2% 10% 2% 5%;
-      background-color: $button-primary-color;
-      background-image: url(~@/assets/img/rating-star.svg);
-      background-repeat: no-repeat;
-      background-position: bottom 50% left 90%;
-      background-size: 20px;
-      border-radius: 4px;
-      font-size: 15px;
-    }
-
-    .merchandise-cards__price {
-      right: 25px;
-      bottom: 155px;
-      position: absolute;
-    }
   }
 
-  .merchandise-cards__item-descriptions {
+  &__rating {
+    bottom: 150px;
+    position: absolute;
+    color: $elements-main-color;
+    padding: 2% 10% 2% 5%;
+    background-color: $button-primary-color;
+    background-image: url(~@/assets/img/rating-star.svg);
+    background-repeat: no-repeat;
+    background-position: bottom 50% left 90%;
+    background-size: 20px;
+    border-radius: 4px;
+    font-size: 15px;
+  }
+
+  &__price {
+    right: 25px;
+    bottom: 155px;
+    position: absolute;
+  }
+
+  &__item-descriptions {
     position: absolute;
     z-index: 1;
     list-style-type: none;
@@ -131,80 +132,80 @@ export default {
     padding: 0% 0% 2% 7%;
     margin: 2%;
     bottom: 60px;
-
-    .merchandise-cards__item-name {
-      position: relative;
-      bottom: 20px;
-      max-height: 20px;
-      max-width: 95%;
-      z-index: 2;
-      font-size: 16px;
-      line-height: 19px;
-      font-weight: $font-weight-medium;
-      cursor: pointer;
-
-      .merchandise-cards__tooltip {
-        visibility: hidden;
-        position: relative;
-        bottom: 8px;
-        width: 90%;
-        text-align: center;
-        background-color: #ededed;
-        color: #2c2c2c;
-        border-radius: 6px;
-        padding: 5px 0;
-        z-index: 2;
-      }
-    }
-
-    .merchandise-cards__item-name:hover .merchandise-cards__tooltip {
-      visibility: visible;
-    }
-
-    .merchandise-cards__item-description {
-      position: relative;
-      z-index: 0;
-
-      font-size: 12px;
-      line-height: 14px;
-      font-weight: $font-weight-light;
-    }
   }
 
-  .merchandise-cards__buttons {
+  &__item-name {
+    position: relative;
+    bottom: 20px;
+    max-height: 20px;
+    max-width: 95%;
+    z-index: 2;
+    font-size: 16px;
+    line-height: 19px;
+    font-weight: $font-weight-medium;
+    cursor: pointer;
+  }
+
+  &__tooltip {
+    visibility: hidden;
+    position: relative;
+    bottom: 8px;
+    width: 90%;
+    text-align: center;
+    background-color: #ededed;
+    color: #2c2c2c;
+    border-radius: 6px;
+    padding: 5px 0;
+    z-index: 2;
+  }
+
+  &__item-name:hover &__tooltip {
+    visibility: visible;
+  }
+
+  &__item-description {
+    position: relative;
+    z-index: 0;
+
+    font-size: 12px;
+    line-height: 14px;
+    font-weight: $font-weight-light;
+  }
+
+  &__buttons {
     z-index: 0;
     position: absolute;
     bottom: 0px;
     width: 100%;
     height: 10%;
     display: flex;
+  }
 
-    .merchandise-cards__wishlist-button {
-      align-items: center;
-      width: 50%;
-      border: none;
-      background-color: $button-secondary-color;
-      border-bottom-left-radius: 4px;
-      background-image: url(~@/assets/img/wishlist-img.svg);
-      background-size: 10%;
-      background-repeat: no-repeat;
-      background-position: left 15% bottom 50%;
-      cursor: pointer;
-    }
+  &__wishlist-button {
+    align-items: center;
+    width: 50%;
+    border: none;
+    background-color: $button-secondary-color;
+    border-bottom-left-radius: 4px;
+    background-image: url(~@/assets/img/wishlist-img.svg);
+    background-size: 10%;
+    background-repeat: no-repeat;
+    background-position: left 15% bottom 50%;
+    cursor: pointer;
+  }
 
-    .merchandise-cards__add-to-cart-button {
-      align-items: center;
-      border: none;
-      width: 50%;
-      color: $elements-main-color;
-      background-color: $button-primary-color;
-      border-bottom-right-radius: 4px;
-      background-image: url(~@/assets/img/add-to-cart-img.svg);
-      background-size: 10%;
-      background-repeat: no-repeat;
-      background-position: left 5% bottom 50%;
-      cursor: pointer;
-    }
+  &__add-to-cart-button {
+    align-items: center;
+    border: none;
+    width: 50%;
+    color: $elements-main-color;
+    background-color: $button-primary-color;
+    border-bottom-right-radius: 4px;
+    background-image: url(~@/assets/img/add-to-cart-img.svg);
+    background-size: 10%;
+    background-repeat: no-repeat;
+    background-position: left 5% bottom 50%;
+    cursor: pointer;
   }
 }
 </style>

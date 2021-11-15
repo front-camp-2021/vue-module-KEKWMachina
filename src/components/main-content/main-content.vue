@@ -24,7 +24,7 @@
               @set-filter="setFilter"
             />
           </div>
-          <div class="filters_line" />
+          <div class="filters__line" />
           <div class="filters__category">
             <h5 class="filters__section-header">
               Brands
@@ -89,8 +89,9 @@ import PriceSlider from "../slider/price-slider.vue";
 import { filterUserInput } from "../helper-functions/filterUserInput.js";
 import { filterData } from "../helper-functions/filterLogic";
 import { findMinMax } from "../helper-functions/findMinMax";
+import { getCards, getCategories, getBrands } from "../helper-functions/API.service"
 import { ref, onBeforeMount } from "@vue/runtime-core";
-import { useStore } from 'vuex';
+import { useStore } from "vuex";
 export default {
   name: "MainContent",
   components: {
@@ -119,29 +120,14 @@ export default {
 
     onBeforeMount(async () => {
       loading.value = true;
-      await getCards();
-      await getCategories();
-      await getBrands();
+      await cards.value.push(await getCards());
+      await categories.value.push(await getCategories());
+      await brands.value.push(await getBrands());
+      await setPriceRange();
       await store.commit("setCards", cards.value[0]);
       loading.value = false;
     });
 
-    const getCards = async function () {
-      const request = await fetch("http://localhost:3001/products");
-      const response = await request.json();
-      await cards.value.push(response);
-      await setPriceRange();
-    };
-    const getCategories = async function () {
-      const request = await fetch("http://localhost:3001/categories");
-      const response = await request.json();
-      categories.value.push(response);
-    };
-    const getBrands = async function () {
-      const request = await fetch("http://localhost:3001/brands");
-      const response = await request.json();
-      brands.value.push(response);
-    };
     const setUserInput = function (input) {
       setPage(0);
       userInput.value = input;
@@ -155,7 +141,6 @@ export default {
       } else {
         filters.value[type] = [...filters.value[type], name];
       }
-      console.log(filters.value);
     };
     const isChecked = function (name, type) {
       return [type].includes(name);
@@ -252,7 +237,7 @@ export default {
     width: 30%;
     position: relative;
 
-    .filters__main {
+    &__main {
       filter: drop-shadow(-0.4px 0.5px 0.05rem $shadow-color);
       margin-top: 5px;
       position: absolute;
@@ -263,41 +248,41 @@ export default {
       font-size: 16px;
       line-height: 32px;
       font-weight: $font-weight-large;
+    }
 
-      .filters__slider {
-        margin-top: 15px;
-        margin-right: 3%;
-        margin-left: 3%;
+    &__slider {
+      margin-top: 15px;
+      margin-right: 3%;
+      margin-left: 3%;
+    }
+
+    &__section-header {
+      font-weight: $font-weight-large;
+      font-size: 18px;
+      line-height: 21px;
+    }
+
+    &__line {
+      margin-top: 5px;
+      margin-left: 5px;
+      justify-content: center;
+      border-bottom: 2px solid $button-secondary-color;
+      width: 95%;
+    }
+
+    &__category {
+      margin-left: 10px;
+
+      &__checkbox-square {
+        cursor: pointer;
       }
 
-      .filters__section-header {
-        font-weight: $font-weight-large;
-        font-size: 18px;
-        line-height: 21px;
-      }
-
-      .filters_line {
-        margin-top: 5px;
-        margin-left: 5px;
-        justify-content: center;
-        border-bottom: 2px solid $button-secondary-color;
-        width: 95%;
-      }
-
-      .filters__category {
-        margin-left: 10px;
-
-        .filters__checkbox-square {
-          cursor: pointer;
-        }
-
-        .filters__checkbox-label {
-          cursor: pointer;
-        }
+      &__checkbox-label {
+        cursor: pointer;
       }
     }
 
-    .filters__filters-reset-button {
+    &__filters-reset-button {
       font-size: 100%;
       height: 30px;
       width: 95%;
@@ -322,7 +307,7 @@ export default {
       width: 100%;
       text-align: center;
 
-      .merchandise-cards__filters-error-message {
+      &__filters-error-message {
         grid-column: span 3;
         border-radius: 4px;
         padding: 15px;
@@ -345,16 +330,12 @@ export default {
       width: 75%;
 
       .merchandise-cards {
-        .merchandise-cards__card {
-          .merchandise-cards__buttons {
-            .merchandise-cards__wishlist-button {
-              font-size: 12px;
-            }
+        &__wishlist-button {
+          font-size: 12px;
+        }
 
-            .merchandise-cards__add-to-cart-button {
-              font-size: 12px;
-            }
-          }
+        &__add-to-cart-button {
+          font-size: 12px;
         }
       }
     }
@@ -362,17 +343,14 @@ export default {
 }
 
 @media (max-width: 1024px) {
-  .header {
-    .header__logo {
-      width: 70px;
-      height: 50px;
-    }
+  .header__logo {
+    width: 70px!important;
+    height: 50px!important;
+  }
 
-    .header__text {
-      font-size: 40px;
-      line-height: 20px;
-      color: $secondary-text-color;
-    }
+  .header__text {
+    font-size: 40px!important;
+    line-height: 20px!important;
   }
 
   .main-content {
@@ -392,22 +370,12 @@ export default {
         gap: 0rem 8px;
         width: 100%;
 
-        .merchandise-cards__card {
+        &__card {
           height: 350px;
+        }
 
-          .merchandise-cards__image {
-            max-height: 130px !important;
-          }
-
-          .merchandise-cards__buttons {
-            .merchandise-cards__wishlist-button {
-              font-size: 9px;
-            }
-
-            .merchandise-cards__add-to-cart-button {
-              font-size: 9px;
-            }
-          }
+        &__image {
+          max-height: 130px !important;
         }
       }
     }
@@ -419,7 +387,7 @@ export default {
     display: flex;
     justify-content: center;
 
-    .wishlist-cards-wrapper__container {
+    &__container {
       border-radius: 4px;
       width: 100%;
       display: grid;
@@ -428,77 +396,9 @@ export default {
       gap: 0rem 8px;
     }
   }
-
-  .pagination {
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-    margin-bottom: 30px;
-
-    .pagination__button-page-back {
-      width: 25px;
-      border: none;
-      border-radius: 50%;
-      margin-right: 20px;
-      background-color: $button-secondary-color;
-      background-repeat: no-repeat;
-      background-position: bottom 50% left 50%;
-      cursor: pointer;
-    }
-
-    .pagination__button-page-forward {
-      width: 25px;
-      border: none;
-      border-radius: 50%;
-      background-color: $button-secondary-color;
-      background-repeat: no-repeat;
-      background-position: bottom 50% left 50%;
-      margin-left: 20px;
-      cursor: pointer;
-    }
-
-    .pagination__main {
-      background-color: $button-secondary-color;
-      border-radius: 25px;
-
-      .active {
-        background-color: $button-primary-color;
-        border-radius: 50%;
-      }
-
-      .pagination__page {
-        height: 25px;
-        width: 25px;
-        text-decoration: none;
-        display: inline-block;
-        color: $main-text-color;
-        border: none;
-        border-radius: 50%;
-
-        .active {
-          background-color: $button-primary-color;
-          border-radius: 50%;
-        }
-      }
-    }
-  }
 }
 
 @media (max-width: 769px) {
-  .header {
-    .header__logo {
-      width: 70px;
-      height: 50px;
-    }
-
-    .header__text {
-      font-size: 40px;
-      line-height: 20px;
-      color: $secondary-text-color;
-    }
-  }
-
   .main-content {
     height: 1920px;
 
@@ -516,22 +416,12 @@ export default {
         gap: 0rem 8px;
         width: 100%;
 
-        .merchandise-cards__card {
-          height: 350px;
+        &__wishlist-button {
+          font-size: 9px;
+        }
 
-          .merchandise-cards__image {
-            max-height: 130px !important;
-          }
-
-          .merchandise-cards__buttons {
-            .merchandise-cards__wishlist-button {
-              font-size: 9px;
-            }
-
-            .merchandise-cards__add-to-cart-button {
-              font-size: 9px;
-            }
-          }
+        &__add-to-cart-button {
+          font-size: 9px;
         }
       }
     }
@@ -543,7 +433,7 @@ export default {
     display: flex;
     justify-content: center;
 
-    .wishlist-cards-wrapper__container {
+    &__container {
       border-radius: 4px;
       width: 100%;
       display: grid;
@@ -554,100 +444,48 @@ export default {
   }
 
   .pagination {
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-    margin-bottom: 30px;
-
-    .pagination__button-page-back {
-      width: 25px;
-      border: none;
-      border-radius: 50%;
-      margin-right: 20px;
-      background-color: $button-secondary-color;
-      background-repeat: no-repeat;
-      background-position: bottom 50% left 50%;
-      cursor: pointer;
+    &__button-page-back {
+      max-width: 25px;
+      padding: 0px;
     }
 
-    .pagination__button-page-forward {
-      width: 25px;
-      border: none;
-      border-radius: 50%;
-      background-color: $button-secondary-color;
-      background-repeat: no-repeat;
-      background-position: bottom 50% left 50%;
-      margin-left: 20px;
-      cursor: pointer;
+    &__button-page-forward {
+      max-width: 25px;
+      padding: 0px;
     }
 
-    .pagination__main {
-      background-color: $button-secondary-color;
+    &__main {
       border-radius: 25px;
+    }
+
+    &__page {
+      max-height: 25px;
+      max-width: 25px;
 
       .active {
-        background-color: $button-primary-color;
         border-radius: 50%;
-      }
-
-      .pagination__page {
-        height: 25px;
-        width: 25px;
-        text-decoration: none;
-        display: inline-block;
-        color: $main-text-color;
-        border: none;
-        border-radius: 50%;
-
-        .active {
-          background-color: $button-primary-color;
-          border-radius: 50%;
-        }
       }
     }
   }
 }
 
 @media (max-width: 600px) {
-  .merchandise-cards__card {
-    height: 350px;
+  .header__logo {
+    width: 65px !important;
+    height: 45px !important;
+  }
 
-    .merchandise-cards__image {
-      max-height: 130px !important;
-    }
-
-    .merchandise-cards__rating-and-price {
-      .merchandise-cards__rating {
-        background-size: 15px;
-      }
-    }
-    .merchandise-cards__buttons {
-      .merchandise-cards__wishlist-button {
-        font-size: 9px;
-      }
-
-      .merchandise-cards__add-to-cart-button {
-        font-size: 9px;
-      }
-    }
+  .header__text {
+    font-size: 30px !important;
+    line-height: 30px !important;
+  }
+  
+  .merchandise-cards__rating {
+    background-size: 15px !important;
   }
 }
 
 @media (max-width: 426px) {
-  .header {
-    .header__logo {
-      width: 65px;
-      height: 45px;
-    }
-
-    .header__text {
-      font-size: 25px;
-      line-height: 18px;
-      color: $secondary-text-color;
-    }
-  }
-
   .main-content-nav {
     flex-direction: column;
 
@@ -670,59 +508,24 @@ export default {
         display: flex;
         flex-direction: column;
 
-        .merchandise-cards__card {
+        &__card {
           width: 100% !important;
           height: 320px !important;
 
-          .merchandise-cards__buttons {
-            .merchandise-cards__wishlist-button {
-              font-size: 10px;
-            }
+          &__wishlist-button {
+            font-size: 12px !important;
+          }
 
-            .merchandise-cards__add-to-cart-button {
-              font-size: 10px;
-            }
+          &__add-to-cart-button {
+            font-size: 12px !important;
           }
         }
       }
     }
   }
 
-  .pagination {
-    .pagination__button-page-back {
-      width: 25px;
-      height: 25px;
-    }
-
-    .pagination__button-page-forward {
-      width: 25px;
-      height: 25px;
-    }
-
-    .pagination__page-outer-first {
-      padding: 2px 7px;
-    }
-
-    .pagination__page-outer-last {
-      padding: 2px 7px;
-    }
-
-    .pagination__page {
-      padding: 2px 7px;
-    }
-
-    .pagination__main {
-      .pagination__page-active {
-        padding: 2px 7px;
-      }
-      .pagination__page {
-        float: left;
-      }
-    }
-  }
-
   .wishlist-cards-wrapper {
-    .wishlist-cards-wrapper__container {
+    &__container {
       width: 100%;
       display: grid;
       grid-template-columns: 95%;

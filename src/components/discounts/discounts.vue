@@ -70,45 +70,34 @@ export default {
   display: flex;
   justify-content: center;
 
-  .wishlist-cards-wrapper__container {
+  &__container {
     border-radius: 4px;
     width: 100%;
     display: grid;
     grid-template-columns: 24.5% 24.5% 24.5% 24.5%;
     grid-template-rows: 1fr 1fr 1fr 1fr;
     gap: 0rem 8px;
-
-    .wishlist-cards-wrapper__message {
-      font-size: 24px;
-    }
   }
 }
 
 @media (max-width: 1200px) {
-  .wishlist-cards-wrapper {
-    .wishlist-cards-wrapper__container {
-      grid-template-columns: 33% 33% 33%;
-      grid-template-rows: 1fr 1fr 1fr;
-
-    }
+  .wishlist-cards-wrapper__container {
+    grid-template-columns: 33% 33% 33%;
+    grid-template-rows: 1fr 1fr 1fr;
   }
 }
 
 @media (max-width: 768px) {
-  .wishlist-cards-wrapper {
-    .wishlist-cards-wrapper__container {
-      grid-template-columns: 49% 49%;
-      grid-template-rows: 1fr 1fr;
-    }
+  .wishlist-cards-wrapper__container {
+    grid-template-columns: 49% 49%;
+    grid-template-rows: 1fr 1fr;
   }
 }
 
 @media (max-width: 540px) {
-  .wishlist-cards-wrapper {
-    .wishlist-cards-wrapper__container {
-      display: flex;
-      flex-direction: column;
-    }
+  .wishlist-cards-wrapper__container {
+    display: flex;
+    flex-direction: column;
   }
 }
 </style>

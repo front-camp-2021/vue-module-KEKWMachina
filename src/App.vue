@@ -52,16 +52,12 @@ body {
       width: 75%;
 
       .merchandise-cards {
-        .merchandise-cards__card {
-          .merchandise-cards__buttons {
-            .merchandise-cards__wishlist-button {
-              font-size: 12px;
-            }
+        &__wishlist-button {
+          font-size: 12px;
+        }
 
-            .merchandise-cards__add-to-cart-button {
-              font-size: 12px;
-            }
-          }
+        &__add-to-cart-button {
+          font-size: 12px;
         }
       }
     }
@@ -69,17 +65,14 @@ body {
 }
 
 @media (max-width: 1024px) {
-  .header {
-    .header__logo {
-      width: 70px;
-      height: 50px;
-    }
+  .header__logo {
+    width: 70px !important;
+    height: 50px !important;
+  }
 
-    .header__text {
-      font-size: 40px;
-      line-height: 20px;
-      color: $secondary-text-color;
-    }
+  .header__text {
+    font-size: 40px !important;
+    line-height: 20px !important;
   }
 
   .main-content {
@@ -99,22 +92,12 @@ body {
         gap: 0rem 8px;
         width: 100%;
 
-        .merchandise-cards__card {
+        &__card {
           height: 350px;
+        }
 
-          .merchandise-cards__image {
-            max-height: 130px !important;
-          }
-
-          .merchandise-cards__buttons {
-            .merchandise-cards__wishlist-button {
-              font-size: 9px;
-            }
-
-            .merchandise-cards__add-to-cart-button {
-              font-size: 9px;
-            }
-          }
+        &__image {
+          max-height: 130px !important;
         }
       }
     }
@@ -126,7 +109,7 @@ body {
     display: flex;
     justify-content: center;
 
-    .wishlist-cards-wrapper__container {
+    &__container {
       border-radius: 4px;
       width: 100%;
       display: grid;
@@ -135,77 +118,9 @@ body {
       gap: 0rem 8px;
     }
   }
-
-  .pagination {
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-    margin-bottom: 30px;
-
-    .pagination__button-page-back {
-      width: 25px;
-      border: none;
-      border-radius: 50%;
-      margin-right: 20px;
-      background-color: $button-secondary-color;
-      background-repeat: no-repeat;
-      background-position: bottom 50% left 50%;
-      cursor: pointer;
-    }
-
-    .pagination__button-page-forward {
-      width: 25px;
-      border: none;
-      border-radius: 50%;
-      background-color: $button-secondary-color;
-      background-repeat: no-repeat;
-      background-position: bottom 50% left 50%;
-      margin-left: 20px;
-      cursor: pointer;
-    }
-
-    .pagination__main {
-      background-color: $button-secondary-color;
-      border-radius: 25px;
-
-      .active {
-        background-color: $button-primary-color;
-        border-radius: 50%;
-      }
-
-      .pagination__page {
-        height: 25px;
-        width: 25px;
-        text-decoration: none;
-        display: inline-block;
-        color: $main-text-color;
-        border: none;
-        border-radius: 50%;
-
-        .active {
-          background-color: $button-primary-color;
-          border-radius: 50%;
-        }
-      }
-    }
-  }
 }
 
 @media (max-width: 769px) {
-  .header {
-    .header__logo {
-      width: 70px;
-      height: 50px;
-    }
-
-    .header__text {
-      font-size: 40px;
-      line-height: 20px;
-      color: $secondary-text-color;
-    }
-  }
-
   .main-content {
     height: 1920px;
 
@@ -223,22 +138,12 @@ body {
         gap: 0rem 8px;
         width: 100%;
 
-        .merchandise-cards__card {
-          height: 350px;
+        &__wishlist-button {
+          font-size: 9px;
+        }
 
-          .merchandise-cards__image {
-            max-height: 130px !important;
-          }
-
-          .merchandise-cards__buttons {
-            .merchandise-cards__wishlist-button {
-              font-size: 9px;
-            }
-
-            .merchandise-cards__add-to-cart-button {
-              font-size: 9px;
-            }
-          }
+        &__add-to-cart-button {
+          font-size: 9px;
         }
       }
     }
@@ -250,7 +155,7 @@ body {
     display: flex;
     justify-content: center;
 
-    .wishlist-cards-wrapper__container {
+    &__container {
       border-radius: 4px;
       width: 100%;
       display: grid;
@@ -261,100 +166,48 @@ body {
   }
 
   .pagination {
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-    margin-bottom: 30px;
-
-    .pagination__button-page-back {
-      width: 25px;
-      border: none;
-      border-radius: 50%;
-      margin-right: 20px;
-      background-color: $button-secondary-color;
-      background-repeat: no-repeat;
-      background-position: bottom 50% left 50%;
-      cursor: pointer;
+    &__button-page-back {
+      max-width: 25px;
+      padding: 0px;
     }
 
-    .pagination__button-page-forward {
-      width: 25px;
-      border: none;
-      border-radius: 50%;
-      background-color: $button-secondary-color;
-      background-repeat: no-repeat;
-      background-position: bottom 50% left 50%;
-      margin-left: 20px;
-      cursor: pointer;
+    &__button-page-forward {
+      max-width: 25px;
+      padding: 0px;
     }
 
-    .pagination__main {
-      background-color: $button-secondary-color;
+    &__main {
       border-radius: 25px;
+    }
+
+    &__page {
+      max-height: 25px;
+      max-width: 25px;
 
       .active {
-        background-color: $button-primary-color;
         border-radius: 50%;
-      }
-
-      .pagination__page {
-        height: 25px;
-        width: 25px;
-        text-decoration: none;
-        display: inline-block;
-        color: $main-text-color;
-        border: none;
-        border-radius: 50%;
-
-        .active {
-          background-color: $button-primary-color;
-          border-radius: 50%;
-        }
       }
     }
   }
 }
 
 @media (max-width: 600px) {
-  .merchandise-cards__card {
-    height: 350px;
+  .header__logo {
+    width: 65px !important;
+    height: 45px !important;
+  }
 
-    .merchandise-cards__image {
-      max-height: 130px !important;
-    }
+  .header__text {
+    font-size: 30px !important;
+    line-height: 30px !important;
+  }
 
-    .merchandise-cards__rating-and-price {
-      .merchandise-cards__rating {
-        background-size: 15px;
-      }
-    }
-    .merchandise-cards__buttons {
-      .merchandise-cards__wishlist-button {
-        font-size: 9px;
-      }
-
-      .merchandise-cards__add-to-cart-button {
-        font-size: 9px;
-      }
-    }
+  .merchandise-cards__rating {
+    background-size: 15px !important;
   }
 }
 
 @media (max-width: 426px) {
-  .header {
-    .header__logo {
-      width: 65px;
-      height: 45px;
-    }
-
-    .header__text {
-      font-size: 25px;
-      line-height: 18px;
-      color: $secondary-text-color;
-    }
-  }
-
   .main-content-nav {
     flex-direction: column;
 
@@ -377,59 +230,24 @@ body {
         display: flex;
         flex-direction: column;
 
-        .merchandise-cards__card {
+        &__card {
           width: 100% !important;
           height: 320px !important;
 
-          .merchandise-cards__buttons {
-            .merchandise-cards__wishlist-button {
-              font-size: 10px;
-            }
+          &__wishlist-button {
+            font-size: 12px !important;
+          }
 
-            .merchandise-cards__add-to-cart-button {
-              font-size: 10px;
-            }
+          &__add-to-cart-button {
+            font-size: 12px !important;
           }
         }
       }
     }
   }
 
-  .pagination {
-    .pagination__button-page-back {
-      width: 25px;
-      height: 25px;
-    }
-
-    .pagination__button-page-forward {
-      width: 25px;
-      height: 25px;
-    }
-
-    .pagination__page-outer-first {
-      padding: 2px 7px;
-    }
-
-    .pagination__page-outer-last {
-      padding: 2px 7px;
-    }
-
-    .pagination__page {
-      padding: 2px 7px;
-    }
-
-    .pagination__main {
-      .pagination__page-active {
-        padding: 2px 7px;
-      }
-      .pagination__page {
-        float: left;
-      }
-    }
-  }
-
   .wishlist-cards-wrapper {
-    .wishlist-cards-wrapper__container {
+    &__container {
       width: 100%;
       display: grid;
       grid-template-columns: 95%;

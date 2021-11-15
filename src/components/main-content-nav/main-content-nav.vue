@@ -49,25 +49,25 @@ export default {
       display: flex;
       justify-content: space-between;
       width: 95%;
+    }
 
-      .filters-header__marker {
-        font-size: 18px;
-        line-height: 21px;
-        font-weight: $font-weight-medium;
-      }
+    &__marker {
+      font-size: 18px;
+      line-height: 21px;
+      font-weight: $font-weight-medium;
+    }
 
-      .filters-header__filters-hide-button {
-        background-color: $elements-main-color;
-        height: 25px;
-        width: 30px;
-        border-radius: 4px;
-        border: none;
-        background-image: url(~@/assets/img/arrows-left.svg);
-        background-repeat: no-repeat;
-        background-position: left 50% bottom 50%;
-        filter: drop-shadow(-0.4px 0.5px 0.05rem $shadow-color);
-        cursor: pointer;
-      }
+    &__filters-hide-button {
+      background-color: $elements-main-color;
+      height: 25px;
+      width: 30px;
+      border-radius: 4px;
+      border: none;
+      background-image: url(~@/assets/img/arrows-left.svg);
+      background-repeat: no-repeat;
+      background-position: left 50% bottom 50%;
+      filter: drop-shadow(-0.4px 0.5px 0.05rem $shadow-color);
+      cursor: pointer;
     }
   }
 

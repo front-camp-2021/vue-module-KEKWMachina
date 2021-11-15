@@ -21,7 +21,7 @@ export default {
     },
     priceRange: {
       type: Array,
-      default: () => [],
+      default: () => [1,1],
     },
   },
   setup(props) {
