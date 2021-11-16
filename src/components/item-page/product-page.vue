@@ -28,9 +28,9 @@
 </template>
 
 <script>
-import { ref, watchEffect } from "@vue/runtime-core";
-import { useStore } from "vuex";
-export default {
+import { ref, watchEffect, defineComponent } from "@vue/runtime-core";
+import { useMainContentComposable } from "../main-content/main-content-composable";
+export default defineComponent({
   name: "Product",
   components: {},
   props: {
@@ -42,14 +42,14 @@ export default {
   setup(props) {
     const BACKEND_URL = "http://localhost:3001/";
     const products = new URL("products", BACKEND_URL);
-    const store = useStore();
     const cardForRender = ref({});
     const loading = ref(true);
-
+    const state = useMainContentComposable();
+    
     watchEffect(async () => {
-      if (store.state.cards.length !== 0) {
+      if (state.cards) {
         loading.value = true;
-        cardForRender.value = store.state.cards[0].find(el => el.id === props.card);
+        cardForRender.value = state.cards.find(el => el.id === props.card);
         loading.value = false;
       } else {
         loading.value = true;
@@ -66,7 +66,7 @@ export default {
       loading
     }
   },
-};
+});
 </script>
 
 <style lang="scss">
