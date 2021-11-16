@@ -30,10 +30,6 @@
 <script>
 import { ref, watchEffect, defineComponent } from "@vue/runtime-core";
 import { useMainContentComposable } from "../main-content/main-content-composable";
-<<<<<<< HEAD
-=======
-import { useStore } from "vuex";
->>>>>>> 50758ce813864e06a6cfc98a0925cbcdfc373659
 export default defineComponent({
   name: "Product",
   components: {},
