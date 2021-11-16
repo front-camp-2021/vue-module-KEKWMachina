@@ -1,13 +1,13 @@
 <template>
-  <div v-if="!loading">
+  <div v-if="!state.loading">
     <main-content-nav :items-found="setCardsForRender().length" />
     <div class="main-content">
       <div class="filters">
         <div class="filters__main">
           <div class="filters__slider">
             <price-slider
-              :cards="cards[0]"
-              :price-range="priceRange"
+              :cards="state.cards[0]"
+              :price-range="state.priceRange"
               @set-price="setPrice"
             />
           </div>
@@ -16,7 +16,7 @@
               Categories
             </h5>
             <checkbox
-              v-for="item in categories[0]"
+              v-for="item in state.categories[0]"
               :key="item"
               :item-name="item"
               name="selectedCategories"
@@ -30,7 +30,7 @@
               Brands
             </h5>
             <checkbox
-              v-for="item in brands[0]"
+              v-for="item in state.brands[0]"
               :key="item.id"
               :item-name="item"
               name="selectedBrands"
@@ -49,13 +49,13 @@
       <div class="cards">
         <searchfield @on-input="setUserInput" />
         <div 
-          v-if="cards[0]" 
+          v-if="state.cards[0]" 
           class="merchandise-cards"
         >
           <card
             v-for="card in setCardsForRender().slice(
-              selectedPage[0],
-              selectedPage[1]
+              state.selectedPage[0],
+              state.selectedPage[1]
             )"
             :key="card.id"
             :card-data="card"
@@ -71,7 +71,7 @@
     </div>
     <pagination
       :card-data="setCardsForRender()"
-      :active-page="selectedPage[2]"
+      :active-page="state.selectedPage[2]"
       @set-page="setPage"
       @page-back="pageBack"
       @page-forward="pageForward"
@@ -86,13 +86,10 @@ import Searchfield from "../searchfield/searchfield.vue";
 import Card from "../card/card.vue";
 import Pagination from "../pagination/pagination.vue";
 import PriceSlider from "../slider/price-slider.vue";
-import { filterUserInput } from "../helper-functions/filterUserInput.js";
-import { filterData } from "../helper-functions/filterLogic";
-import { findMinMax } from "../helper-functions/findMinMax";
-import { getCards, getCategories, getBrands } from "../helper-functions/API.service"
-import { ref, onBeforeMount } from "@vue/runtime-core";
-import { useStore } from "vuex";
-export default {
+import { defineComponent } from "@vue/runtime-core";
+import { useMainContentComposable } from "./main-content-composable";
+
+export default defineComponent({
   name: "MainContent",
   components: {
     MainContentNav,
@@ -103,125 +100,35 @@ export default {
     PriceSlider,
   },
   setup() {
-    const cards = ref([]);
-    const categories = ref([]);
-    const brands = ref([]);
-    const filters = ref({
-      selectedCategories: [],
-      selectedBrands: [],
-    });
-    const selectedCategories = ref([]);
-    const selectedBrands = ref([]);
-    const loading = ref(true);
-    const userInput = ref("");
-    const priceRange = ref([]);
-    const selectedPage = ref([0, 9, 1]);
-    const store = useStore();
-
-    onBeforeMount(async () => {
-      loading.value = true;
-      await cards.value.push(await getCards());
-      await categories.value.push(await getCategories());
-      await brands.value.push(await getBrands());
-      await setPriceRange();
-      await store.commit("setCards", cards.value[0]);
-      loading.value = false;
-    });
-
-    const setUserInput = function (input) {
-      setPage(0);
-      userInput.value = input;
-    };
-    const setFilter = function (name, type) {
-      setPage(0);
-      if (filters.value[type].includes(name)) {
-        filters.value[type] = filters.value[type].filter(
-          (value) => value !== name
-        );
-      } else {
-        filters.value[type] = [...filters.value[type], name];
-      }
-    };
-    const isChecked = function (name, type) {
-      return [type].includes(name);
-    };
-    const setPrice = function (prices) {
-      setPage(0);
-      const selectedPriceRange = prices;
-      cards.value.push(
-        cards.value[0].filter((card) => {
-          return (
-            card.price >= selectedPriceRange[0] &&
-            card.price <= selectedPriceRange[1]
-          );
-        })
-      );
-    };
-    const setPriceRange = function () {
-      priceRange.value = findMinMax(cards.value[0]);
-    };
-    const setCardsForRender = function () {
-      return filterData(
-        filterUserInput(userInput.value, cards.value[cards.value.length - 1]),
-        filters.value.selectedCategories,
-        filters.value.selectedBrands,
-        filterUserInput(userInput.value, cards.value[cards.value.length - 1])
-      );
-    };
-    const setPage = function (page) {
-      selectedPage.value = [page * 9, (page + 1) * 9, page + 1];
-    };
-    const pageBack = function () {
-      selectedPage.value[0] -= 9;
-      selectedPage.value[1] -= 9;
-      selectedPage.value[2] -= 1;
-    };
-    const pageForward = function () {
-      selectedPage.value[0] += 9;
-      selectedPage.value[1] += 9;
-      selectedPage.value[2] += 1;
-    };
-    const resetSelections = function () {
-      setPage(0);
-      selectedCategories.value = [];
-      selectedBrands.value = [];
-      userInput.value = "";
-      document.querySelector(".searchfield__input").value = "";
-      document
-        .querySelectorAll(".filters__checkbox-square")
-        .forEach((checkbox) => (checkbox.checked = false));
-      const prices = document.querySelectorAll(".slider-tooltip");
-      priceRange.value = findMinMax(cards.value[0]);
-      prices[0].textContent = priceRange.value[0];
-      prices[1].textContent = priceRange.value[1];
-    };
-
-    return {
-      cards,
-      categories,
-      brands,
-      selectedCategories,
-      selectedBrands,
-      loading,
-      userInput,
-      priceRange,
-      selectedPage,
-      getCards,
-      getCategories,
-      getBrands,
+    const {
+      state,
       setUserInput,
       setFilter,
       isChecked,
       setPrice,
       setPriceRange,
-      resetSelections,
       setCardsForRender,
-      pageBack,
       setPage,
+      pageBack,
       pageForward,
+      resetSelections,
+    } = useMainContentComposable();
+
+    return {
+      state,
+      setUserInput,
+      setFilter,
+      isChecked,
+      setPrice,
+      setPriceRange,
+      setCardsForRender,
+      setPage,
+      pageBack,
+      pageForward,
+      resetSelections,
     };
   },
-};
+});
 </script>
 
 <style lang="scss">
